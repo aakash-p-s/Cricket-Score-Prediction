@@ -1,0 +1,481 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+      <!-- bootstrap core css -->
+  <link rel="stylesheet" type="text/css" href="css/bootstrap.css" />
+
+  <!-- fonts style -->
+  <link href="https://fonts.googleapis.com/css?family=Poppins:400,600,700&display=swap" rel="stylesheet">
+  <!-- Custom styles for this template >
+  <link href="css/style.css" rel="stylesheet" /-->
+  <!-- responsive style -->
+  <link href="css/responsive.css" rel="stylesheet" />
+
+
+    <title>Cricket Score Prediction</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <style>
+        body{
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            background: url('../static/images/Green\ and\ White\ Photographic\ Blogger\ Bio-Link\ Website.png');
+        }
+        form{
+            border: 1px solid black;
+            padding: 20px 20px;
+            border-radius: 5px;
+            background: #ffffff66;
+        }
+        form input,select{
+            width: 100%;
+            background: #ffffff30;
+            border: 1px solid black;
+        }
+        .pred-btn{
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            padding: 20px 0px;
+        }
+        .pred-btn input{
+            border: 1px solid black;
+            width: 30%;
+            border-radius: 5px;
+        }
+        .pred-btn1{
+            width: 100%;
+            display: flex;
+            background: #ffffff30;
+            justify-content: left;
+            padding: 20px 0px;
+        }
+
+    
+        </style>
+
+</head>
+<body>
+    <div id="backLink">
+        <a href="/">
+            <span><h4>
+                BACK
+                </h4>
+            </span>
+        </a>
+    </div>
+    
+    <!-- Your existing form code -->
+    
+
+    
+    <h1>Predict Cricket Score</h1>
+    <form method="POST" id="predictionForm">
+        <div class="row mb-2 d-flex align-items-baseline">
+            <div class="col-lg-6">
+                <label for="batting_team">Batting Team:</label>
+            </div>
+            <div class="col-lg-6">
+                <select id="batting_team" name="batting_team" required onchange="updateBowlingTeamOptions(this.value)">
+                    <option value="" selected disabled>Select an Option</option>
+                    <option value=0>Chennai Super Kings</option>
+                    <option value=1>Delhi Daredevils</option>
+                    <option value=2>Kings XI Punjab</option>
+                    <option value=3>Kolkata Knight Riders</option>
+                    <option value=4>Mumbai Indians</option>
+                    <option value=5>Rajasthan Royals</option>
+                    <option value=6>Royal Challengers Bangalore</option>
+                    <option value=7>Sunrisers Hyderabad</option>
+                    <!-- Add more options as needed -->
+                </select>
+            </div>
+        </div>
+        <div class="row mb-2 d-flex align-items-baseline">
+            <div class="col-lg-6">
+                <label for="bowling_team">Bowling Team:</label>
+            </div>
+            <div class="col-lg-6">
+                <select id="bowling_team" name="bowling_team" required>
+                    <option value="" selected disabled>Select an Option</option>
+                    <option value=0>Chennai Super Kings</option>
+                    <option value=1>Delhi Daredevils</option>
+                    <option value=2>Kings XI Punjab</option>
+                    <option value=3>Kolkata Knight Riders</option>
+                    <option value=4>Mumbai Indians</option>
+                    <option value=5>Rajasthan Royals</option>
+                    <option value=6>Royal Challengers Bangalore</option>
+                    <option value=7>Sunrisers Hyderabad</option>
+                    <!-- Add more options as needed -->
+                </select><br>
+            </div>
+        </div>
+        <!--validation1-->
+        <script>
+            function updateBowlingTeamOptions(selectedValue) {
+                var bowlingTeamDropdown = document.getElementById('bowling_team');
+                // Remove all existing options
+                bowlingTeamDropdown.innerHTML = '';
+        
+                // Get all options from the batting team dropdown
+                var battingTeamOptions = document.getElementById('batting_team').options;
+        
+                // Add options to the bowling team dropdown excluding the selected value in batting team
+                for (var i = 0; i < battingTeamOptions.length; i++) {
+                    if (battingTeamOptions[i].value != selectedValue) {
+                        var option = document.createElement('option');
+                        option.value = battingTeamOptions[i].value;
+                        option.text = battingTeamOptions[i].text;
+                        bowlingTeamDropdown.add(option);
+                    }
+                }
+            }
+        </script>
+<!--script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const form = document.querySelector('form');
+        const oversInput = document.querySelector('input[name="overs"]');
+        const runsInput = document.querySelector('input[name="runs"]');
+        const wicketsInput = document.querySelector('input[name="wickets"]');
+        const prev5OversRunsInput = document.querySelector('input[name="prev_5_overs_runs"]');
+        const prev5OversWicketsInput = document.querySelector('input[name="prev_5_overs_wickets"]');
+
+        // Update max attribute of "runs" input based on the specified logic
+        oversInput.addEventListener('input', function () {
+            const oversValue = parseFloat(oversInput.value);
+
+            // Calculate the maximum runs based on the formula (int(overs) * 13)
+            const maxRuns = Math.floor(oversValue) * 13;
+
+            // Update the max attribute of the "runs" input
+            runsInput.max = maxRuns;
+        });
+
+        form.addEventListener('submit', function (event) {
+            let isValid = true;
+
+            // Validate Overs
+            if (parseFloat(oversInput.value) < 5.1 || parseFloat(oversInput.value) > 19.5) {
+                isValid = false;
+                alert('Overs must be between 5.1 and 19.5');
+                oversInput.focus(); // Focus on the "overs" input
+            }
+
+            // Validate Runs
+            const maxRuns = Math.floor(parseFloat(oversInput.value)) * 13;
+            if (parseFloat(runsInput.value) < 0 || parseFloat(runsInput.value) > maxRuns) {
+                isValid = false;
+                alert('Current Runs must be between 0 and ' + maxRuns);
+                runsInput.focus(); // Focus on the "runs" input
+            }
+
+            // Validate Wickets
+            if (parseFloat(wicketsInput.value) < 0 || parseFloat(wicketsInput.value) > 9) {
+                isValid = false;
+                alert('Current Wickets must be between 0 and 9');
+                wicketsInput.focus(); // Focus on the "wickets" input
+            }
+
+            // Validate Previous 5 Overs Runs
+            if (parseFloat(prev5OversRunsInput.value) < 0) {
+                isValid = false;
+                alert('Runs in Previous 5 Overs must be 0 or greater');
+                prev5OversRunsInput.focus(); // Focus on the "prev_5_overs_runs" input
+            }
+
+            // Validate Previous 5 Overs Wickets
+            if (parseFloat(prev5OversWicketsInput.value) < 0 || parseFloat(prev5OversWicketsInput.value) > 5) {
+                isValid = false;
+                alert('Wickets in Previous 5 Overs must be between 0 and 5');
+                prev5OversWicketsInput.focus(); // Focus on the "prev_5_overs_wickets" input
+            }
+
+            // Prevent form submission if validation fails
+            if (!isValid) {
+                event.preventDefault();
+            }
+        });
+    });
+</script-->
+
+        
+        
+
+        <div class="row mb-2 d-flex align-items-baseline">
+            <div class="col-lg-6">
+                <label for="overs">Overs:</label>
+            </div>
+            
+            <div class="col-lg-6">
+                <input type="number" name="overs" step="0.1"  min="5.1" max="19.5" required>
+            </div>
+        </div>
+        <div class="row mb-2 d-flex align-items-baseline">
+            <div class="col-lg-6">
+                <label for="runs">Current Runs:</label>
+            </div>
+            <div class="col-lg-6">
+                <input type="number" name="runs" required>
+            </div>
+        </div>
+        <div class="row mb-2 d-flex align-items-baseline">
+            <div class="col-lg-6">
+                <label for="wickets">Current Wickets:</label>
+            </div>
+            <div class="col-lg-6">
+                <input type="number" name="wickets" min="0" max="9" step="1" required>
+            </div>
+        </div>
+        <div class="row mb-2 d-flex align-items-baseline">
+            <div class="col-lg-6">
+                <label for="prev_5_overs_runs">Runs in Previous 5 Overs:</label>
+            </div>
+            <div class="col-lg-6">
+                <input type="number" name="prev_5_overs_runs" placeholder="Enter runs scored 0-Current Runs" required>
+            </div>
+        </div>
+        <div class="row mb-2 d-flex align-items-baseline">
+            <div class="col-lg-6">
+                <label for="prev_5_overs_wickets">Wickets in Previous 5 Overs:</label>
+            </div>
+            <div class="col-lg-6">
+                <input type="number" name="prev_5_overs_wickets" placeholder="Enter wickets 0-Current wickets"required>
+            </div>
+        </div>
+        <div class="pred-btn">
+            <input type="submit" value="Lets Predict">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type="reset" value="Clear All">
+        </div>
+        
+    </form>
+    <!--VALIDATION-->
+    <script>
+        //#1 list of TEAM
+        // Function to save form values to local storage
+        function saveFormValues() {
+            const form = document.querySelector('form');
+            const inputs = form.querySelectorAll('input, select');
+            
+            inputs.forEach(input => {
+                localStorage.setItem(input.name, input.value);
+            });
+        }
+
+        // Function to load form values from local storage
+        function loadFormValues() {
+            const form = document.querySelector('form');
+            const inputs = form.querySelectorAll('input, select');
+
+            inputs.forEach(input => {
+                const storedValue = localStorage.getItem(input.name);
+                if (storedValue !== null) {
+                    input.value = storedValue;
+                }
+            });
+        }
+
+        // Function to clear local storage when the form is submitted
+        function clearLocalStorage() {
+            localStorage.clear();
+        }
+
+        document.addEventListener('DOMContentLoaded', function () {
+            loadFormValues(); // Load form values when the page is loaded
+
+            const form = document.querySelector('form');
+            form.addEventListener('submit', function () {
+                saveFormValues(); // Save form values when the form is submitted
+                clearLocalStorage(); // Clear local storage after submission
+            });
+
+            const backButton = document.getElementById('backButton');
+            backButton.addEventListener('click', function () {
+                clearLocalStorage(); // Clear local storage when navigating back to index.html
+            });
+        });//#VALIDATION 1 ENDS
+    </script>
+        <script>
+            document.addEventListener('DOMContentLoaded', function () {
+                // Your existing JavaScript code
+        
+                // Add styling for the back link division
+                const backLinkDiv = document.getElementById('backLink');
+                backLinkDiv.style.position = 'absolute';
+                backLinkDiv.style.top = '10px'; // Adjust the top position as needed
+                backLinkDiv.style.left = '10px'; // Adjust the left position as needed
+            });
+        </script>
+        <script>
+            document.addEventListener('DOMContentLoaded', function () {
+                const form = document.getElementById('predictionForm');
+                const formDataKey = 'predictionFormData';
+        
+                // Load form data from local storage
+                const storedFormData = localStorage.getItem(formDataKey);
+                if (storedFormData) {
+                    const parsedFormData = JSON.parse(storedFormData);
+                    populateForm(parsedFormData);
+                }
+        
+                form.addEventListener('submit', function (event) {
+                    event.preventDefault();
+        
+                    let isValid = true;
+        
+                    // Your existing form validation logic here
+        
+                    if (isValid) {
+                        // Save form data to local storage
+                        const formData = getFormData();
+                        localStorage.setItem(formDataKey, JSON.stringify(formData));
+        
+                        // Submit the form
+                        form.submit();
+                    }
+                });
+        
+                function getFormData() {
+                    return {
+                        battingTeam: document.getElementById('batting_team').value,
+                        bowlingTeam: document.getElementById('bowling_team').value,
+                        overs: document.querySelector('input[name="overs"]').value,
+                        runs: document.querySelector('input[name="runs"]').value,
+                        wickets: document.querySelector('input[name="wickets"]').value,
+                        prev5OversRuns: document.querySelector('input[name="prev_5_overs_runs"]').value,
+                        prev5OversWickets: document.querySelector('input[name="prev_5_overs_wickets"]').value,
+                    };
+                }
+        
+                function populateForm(formData) {
+                    document.getElementById('batting_team').value = formData.battingTeam;
+                    document.getElementById('bowling_team').value = formData.bowlingTeam;
+                    document.querySelector('input[name="overs"]').value = formData.overs;
+                    document.querySelector('input[name="runs"]').value = formData.runs;
+                    document.querySelector('input[name="wickets"]').value = formData.wickets;
+                    document.querySelector('input[name="prev_5_overs_runs"]').value = formData.prev5OversRuns;
+                    document.querySelector('input[name="prev_5_overs_wickets"]').value = formData.prev5OversWickets;
+                }
+            });
+        </script>
+        <!--over validation-->
+        <!--script>
+            document.addEventListener('DOMContentLoaded', function () {
+                const form = document.querySelector('form');
+                const oversInput = document.querySelector('input[name="overs"]');
+                const runsInput = document.querySelector('input[name="runs"]');
+                const wicketsInput = document.querySelector('input[name="wickets"]');
+                const prev5OversRunsInput = document.querySelector('input[name="prev_5_overs_runs"]');
+                const prev5OversWicketsInput = document.querySelector('input[name="prev_5_overs_wickets"]');
+                let isValidOvers = false;
+        
+                // Update max attribute of "runs" input based on the specified logic
+                oversInput.addEventListener('input', function () {
+                    // Use a regular expression to match the expected pattern (e.g., 5.1, 11.3, etc.)
+                    const inputValue = oversInput.value;
+                    const isValidInput = /^\d+(\.\d)?$/.test(inputValue);
+        
+                    if (isValidInput) {
+                        // If the input is valid, set a flag
+                        isValidOvers = true;
+                    } else {
+                        // If the input is not valid, reset the flag
+                        isValidOvers = false;
+                    }
+                });
+        
+                // Listen for the Enter key press event
+                oversInput.addEventListener('keypress', function (event) {
+                    if (event.key === 'Enter') {
+                        // Check if the entered value is in the valid overs pattern
+                        if (!isValidOvers) {
+                            // If not valid, display an error message
+                            alert('Invalid overs. Please enter a valid value.');
+                            oversInput.value = ''; // Clear the input
+                        }
+                    }
+                });
+        
+                form.addEventListener('submit', function (event) {
+                    let isValid = true;
+        
+                    // Validate Overs
+                    if (parseFloat(oversInput.value) < 5.1 || parseFloat(oversInput.value) > 19) {
+                        isValid = false;
+                        alert('Overs must be between 5.1 and 19');
+                        oversInput.focus(); // Focus on the "overs" input
+                    }
+                    else if (parseFloat(oversInput.value)%1>=.0.6 && parseFloat(oversInput.value)%1<=.0.9)
+                    {
+                        isValid = false;
+                        alert('Overs must be between x.0 and x.5');
+                        oversInput.focus(); // Focus on the "overs" input
+                    }
+        
+                    // Validate Runs
+                    const maxRuns = Math.floor(parseFloat(oversInput.value)) * 13;
+                    if (parseFloat(runsInput.value) < 0 || parseFloat(runsInput.value) > maxRuns) {
+                        isValid = false;
+                        alert('Current Runs must be between 0 and ' + maxRuns);
+                        runsInput.focus(); // Focus on the "runs" input
+                    }
+        
+                    // Validate Wickets
+                    if (parseFloat(wicketsInput.value) < 0 || parseFloat(wicketsInput.value) > 9) {
+                        isValid = false;
+                        alert('Current Wickets must be between 0 and 9');
+                        wicketsInput.focus(); // Focus on the "wickets" input
+                    }
+        
+                    // Validate Previous 5 Overs Runs
+                    if (parseFloat(prev5OversRunsInput.value) < 0) {
+                        isValid = false;
+                        alert('Runs in Previous 5 Overs must be 0 or greater');
+                        prev5OversRunsInput.focus(); // Focus on the "prev_5_overs_runs" input
+                    }
+        
+                    // Validate Previous 5 Overs Wickets
+                    if (parseFloat(prev5OversWicketsInput.value) < 0 || parseFloat(prev5OversWicketsInput.value) > 5) {
+                        isValid = false;
+                        alert('Wickets in Previous 5 Overs must be between 0 and 5');
+                        prev5OversWicketsInput.focus(); // Focus on the "prev_5_overs_wickets" input
+                    }
+        
+                    // Prevent form submission if validation fails
+                    if (!isValid) {
+                        event.preventDefault();
+                    }
+                });
+            });
+        </script-->
+        <script>
+            document.addEventListener('DOMContentLoaded', function () {
+    const form = document.getElementById('predictionForm');
+    const oversInput = document.querySelector('input[name="overs"]');
+    
+    form.addEventListener('submit', function (event) {
+        // Validate Overs
+        const oversValue = parseFloat(oversInput.value)%1;
+
+        if (oversValue >= 0.6 && oversValue <= 0.9) {
+            alert('Overs must be between X.0 and X.5');
+            oversInput.focus(); // Focus on the "overs" input
+            event.preventDefault(); // Prevent form submission
+        }
+
+        // Other validation logic for the rest of the form fields
+        // ...
+
+    });
+});
+        </script>
+        
+
+
+<center>
+    {% if prediction %}
+    <h2>Prediction:</h2>
+    <p>The predicted score is within: {{ prediction-5 }} - {{prediction+5}}</p>
+    {% endif %}</center>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+</body>
+</html>
